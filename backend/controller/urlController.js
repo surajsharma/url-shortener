@@ -8,7 +8,7 @@ const User = require("../models/user");
 //@route    GET /api/urls
 //@access   private
 const getUrls = asyncHandler(async (req, res) => {
-    console.log(req.query.user);
+    // console.log(req.query.user);
     const urls = await Url.find({ user: req.query.user });
     res.status(200).json(urls);
 });
@@ -130,6 +130,8 @@ const deleteUrl = asyncHandler(async (req, res) => {
         throw new Error("Url not found");
     }
 
+    const user = await User.findById(req.user.id);
+
     //check for user
     if (!user) {
         res.status(401);
@@ -137,14 +139,14 @@ const deleteUrl = asyncHandler(async (req, res) => {
     }
 
     //make sure the logged in user matched the goal user
-    if (url.user.toString() !== user.id) {
+    if (url.user.toString() !== user.email) {
         res.status(401);
         throw new Error("User not authorized");
     }
 
     const deletedUrl = await Url.findByIdAndDelete(req.params.id);
 
-    res.status(200).json({ id: `deleted ${updatedUrl}` });
+    res.status(200).json({ id: url._id });
 });
 
 module.exports = {

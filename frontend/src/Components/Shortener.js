@@ -97,7 +97,7 @@ function Shortener({ loginData, setLoginData, apiKey, setApiKey }) {
         .then((response) => response.json())
         .then((json) => {
           console.log(json);
-          setUrls([...urls, json].reverse());
+          setUrls(urls.length ? [...urls, json].reverse() : [...urls, json]);
           setUrl('');
           setLoading(false);
         })
@@ -169,12 +169,12 @@ function Shortener({ loginData, setLoginData, apiKey, setApiKey }) {
         setApiKey={setApiKey}
       />
       {loading ? (
-        <div className="flex justify-center w-full mt-5">
+        <div className="flex inline-block justify-center w-full mt-5 h-32 bg-gray-100 align-middle">
           <Loader />
         </div>
       ) : (
         <>
-          <div className="flex justify-center w-full">
+          <div className="flex inline-block justify-center w-full  mt-5 h-32 bg-gray-100 align-middle">
             <div className="mb-3">
               <br />
               <input
@@ -228,7 +228,14 @@ function Shortener({ loginData, setLoginData, apiKey, setApiKey }) {
         </>
       )}
       {urls.map((url) => (
-        <UrlCard key={url._id} URL={url} />
+        <UrlCard
+          key={url._id}
+          URL={url}
+          loginData={loginData}
+          setLoading={setLoading}
+          urls={urls}
+          setUrls={setUrls}
+        />
       ))}
     </>
   );

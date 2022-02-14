@@ -1,4 +1,5 @@
 const express = require("express");
+var cors = require("cors");
 
 const colors = require("colors");
 const dotenv = require("dotenv").config();
@@ -25,6 +26,7 @@ const app = express();
 //     );
 // });
 
+app.use(cors({ credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 

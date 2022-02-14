@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 function Navbar({ loginData, handleLogout, handleApiKey }) {
+  // console.log('🚀 ~ file: Navbar.js ~ line 4 ~ Navbar ~ loginData', loginData);
   const [menu, toggleMenu] = useState(false);
   const [mmenu, togglemMenu] = useState(false);
   return (

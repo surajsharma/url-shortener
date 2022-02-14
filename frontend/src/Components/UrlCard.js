@@ -1,7 +1,8 @@
 import React from 'react';
+import { TrashIcon } from '@heroicons/react/solid';
 
-function UrlCard({ URL }) {
-  const { url, shortUrl, user, encrypted } = URL;
+function UrlCard({ URL, loginData, setLoading, urls, setUrls }) {
+  const { _id, url, shortUrl, user, encrypted } = URL;
 
   const accessEncryptedUrl = () => {
     console.log(shortUrl);
@@ -41,6 +42,47 @@ function UrlCard({ URL }) {
     }
   };
 
+  const handleDeleteUrl = () => {
+    console.log(_id);
+    let Authorization = loginData.googleUser
+      ? `Google ${loginData.token}`
+      : `Bearer ${loginData.token}`;
+
+    let api_url = `/api/urls/${_id}`;
+
+    let headers = {
+      'Content-Type': 'application/json',
+      Authorization,
+    };
+    console.log(
+      '🚀 ~ file: UrlCard.js ~ line 57 ~ handleDeleteUrl ~ headers',
+      headers
+    );
+
+    setLoading(true);
+
+    fetch(api_url, {
+      method: 'DELETE',
+      headers,
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((json) => {
+        if (urls.length === 1) {
+          setUrls([]);
+        } else {
+          console.log(json, urls);
+          setUrls([...urls].filter((url) => url._id !== json.id).reverse());
+        }
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
+  };
+
   return (
     <div className="flex justify-center">
       <div className="container mx-auto px-4 sm:px-8">
@@ -51,7 +93,13 @@ function UrlCard({ URL }) {
                 <thead>
                   <tr>
                     <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                      URL
+                      <div className="flex">
+                        <TrashIcon
+                          className="h-4 w-4 text-gray-500"
+                          onClick={handleDeleteUrl}
+                        />
+                        URL
+                      </div>
                     </th>
                     <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                       Short Url
