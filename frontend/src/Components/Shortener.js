@@ -34,7 +34,6 @@ function Shortener({ loginData, setLoginData, apiKey, setApiKey }) {
         return response.json();
       })
       .then((json) => {
-        console.log('🚀 ~ file: Shortener.js ~ line 35 ~ .then ~ json', json);
         setUrls(json.reverse());
         setLoading(false);
       })
