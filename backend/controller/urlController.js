@@ -8,6 +8,7 @@ const User = require("../models/user");
 //@route    GET /api/urls
 //@access   private
 const getUrls = asyncHandler(async (req, res) => {
+    console.log(req.query.user);
     const urls = await Url.find({ user: req.query.user });
     res.status(200).json(urls);
 });
@@ -16,7 +17,6 @@ const getUrls = asyncHandler(async (req, res) => {
 //@route    POST /api/urls/:key
 //@access   private
 const setUrlWithKey = asyncHandler(async (req, res) => {
-
     if (!req.body.url) {
         res.status(400);
         throw new Error("Please add a Url");
@@ -27,25 +27,26 @@ const setUrlWithKey = asyncHandler(async (req, res) => {
         throw new Error("Please add a User");
     }
 
-    if(!req.body.key){
+    if (!req.body.key) {
         res.status(400);
         throw new Error("Please add a Key for encryption");
     }
 
     const crypt = (salt, text) => {
-        const textToChars = (text) => text.split('').map((c) => c.charCodeAt(0));
-        const byteHex = (n) => ('0' + Number(n).toString(16)).substr(-2);
+        const textToChars = (text) =>
+            text.split("").map((c) => c.charCodeAt(0));
+        const byteHex = (n) => ("0" + Number(n).toString(16)).substr(-2);
         const applySaltToChar = (code) =>
-          textToChars(salt).reduce((a, b) => a ^ b, code);
-    
+            textToChars(salt).reduce((a, b) => a ^ b, code);
+
         return text
-          .split('')
-          .map(textToChars)
-          .map(applySaltToChar)
-          .map(byteHex)
-          .join('');
-      };
-        
+            .split("")
+            .map(textToChars)
+            .map(applySaltToChar)
+            .map(byteHex)
+            .join("");
+    };
+
     shortUrl.short(req.body.url, async (err, url) => {
         if (url) {
             const surl = await Url.create({

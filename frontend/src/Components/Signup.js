@@ -9,27 +9,29 @@ function Signup() {
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
+    //validate confirm password
     if (rpassWord !== passWord) {
       e.preventDefault();
       alert("passwords don't match");
       return;
     }
 
+    //validate email
+    let match = email.match(
+      // eslint-disable-next-line no-useless-escape
+      /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    );
+    if (!match) {
+      alert('please enter valid email');
+      return;
+    }
+
     if (email && passWord && name) {
       e.preventDefault();
-      let match = email.match(
-        // eslint-disable-next-line no-useless-escape
-        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-      );
-      if (!match) {
-        alert('please enter valid email');
-        return;
-      }
-
       let url = `/api/users/`;
 
       fetch(url, {
-        method: 'post',
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: email,
