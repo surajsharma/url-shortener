@@ -1,5 +1,5 @@
 const asyncHandler = require("express-async-handler");
-const { OAuth2Client } = require('google-auth-library');
+const { OAuth2Client } = require("google-auth-library");
 
 const Url = require("../models/urls");
 const User = require("../models/user");
@@ -13,17 +13,16 @@ const googleLogin = asyncHandler(async (req, res) => {
 
     const ticket = await client.verifyIdToken({
         idToken: token,
-        audience: process.env.CLIENT_ID,
+        audience: process.env.CLIENT_ID
     });
 
     const { name, email, picture } = ticket.getPayload();
-    
+
     //redirect to sign-in after google
 
-    res.status(200).json({ name, email, picture });
+    return res.status(200).json({ name, email, picture });
 });
-
 
 module.exports = {
     googleLogin
-}
+};

@@ -10,7 +10,7 @@ const User = require("../models/user");
 const getUrls = asyncHandler(async (req, res) => {
     // console.log(req.query.user);
     const urls = await Url.find({ user: req.query.user });
-    res.status(200).json(urls);
+    return res.status(200).json(urls);
 });
 
 //@desc     shorten and set url with a key
@@ -55,7 +55,7 @@ const setUrlWithKey = asyncHandler(async (req, res) => {
                 shortUrl: crypt(req.body.key, url),
                 encrypted: true
             });
-            res.status(200).json(surl);
+            return res.status(200).json(surl);
         }
     });
 });
@@ -131,8 +131,9 @@ const deleteUrl = asyncHandler(async (req, res) => {
     }
 
     if (req.body.googleUser) {
+        //google authenticated user, skip auth check
         const deletedUrl = await Url.findByIdAndDelete(req.params.id);
-        res.status(200).json({ deletedUrl });
+        return res.status(200).json({ deletedUrl });
     } else {
         user = await User.findById(req.user.id);
     }
@@ -153,7 +154,7 @@ const deleteUrl = asyncHandler(async (req, res) => {
     }
 
     const deletedUrl = await Url.findByIdAndDelete(req.params.id);
-    res.status(200).json({ deletedUrl });
+    return res.status(200).json({ deletedUrl });
 });
 
 module.exports = {
