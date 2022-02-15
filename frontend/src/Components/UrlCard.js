@@ -5,8 +5,6 @@ function UrlCard({ URL, loginData, setLoading, urls, setUrls }) {
   const { _id, url, shortUrl, user, encrypted } = URL;
 
   const accessEncryptedUrl = () => {
-    console.log(shortUrl);
-
     const decrypt = (salt, encoded) => {
       const textToChars = (text) => text.split('').map((c) => c.charCodeAt(0));
 
@@ -43,7 +41,7 @@ function UrlCard({ URL, loginData, setLoading, urls, setUrls }) {
   };
 
   const handleDeleteUrl = () => {
-    console.log(_id);
+    console.log(_id, loginData);
     let Authorization = loginData.googleUser
       ? `Google ${loginData.token}`
       : `Bearer ${loginData.token}`;
@@ -54,16 +52,16 @@ function UrlCard({ URL, loginData, setLoading, urls, setUrls }) {
       'Content-Type': 'application/json',
       Authorization,
     };
-    console.log(
-      '🚀 ~ file: UrlCard.js ~ line 57 ~ handleDeleteUrl ~ headers',
-      headers
-    );
 
     setLoading(true);
 
     fetch(api_url, {
       method: 'DELETE',
       headers,
+      body: JSON.stringify({
+        email: loginData.email,
+        googleUser: loginData.googleUser,
+      }),
     })
       .then((response) => {
         return response.json();
@@ -72,8 +70,9 @@ function UrlCard({ URL, loginData, setLoading, urls, setUrls }) {
         if (urls.length === 1) {
           setUrls([]);
         } else {
-          console.log(json, urls);
-          setUrls([...urls].filter((url) => url._id !== json.id).reverse());
+          setUrls(
+            [...urls].filter((url) => url._id !== json.deletedUrl._id).reverse()
+          );
         }
         setLoading(false);
       })
@@ -102,7 +101,7 @@ function UrlCard({ URL, loginData, setLoading, urls, setUrls }) {
                       </div>
                     </th>
                     <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                      Short Url
+                      Short
                     </th>
                     <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                       User

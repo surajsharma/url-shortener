@@ -1,42 +1,50 @@
-const jwt = require('jsonwebtoken');
-const asyncHandler = require('express-async-handler');
-const User = require('../models/user');
+const jwt = require("jsonwebtoken");
+const asyncHandler = require("express-async-handler");
+const User = require("../models/user");
 
-const protect = asyncHandler(async(req,res,next)=>{
+const protect = asyncHandler(async (req, res, next) => {
     let token;
 
-    if(req.headers.authorization && req.headers.authorization.startsWith("Bearer")){
+    if (
+        req.headers.authorization &&
+        req.headers.authorization.startsWith("Bearer")
+    ) {
         try {
             //get token from header
-            token = req.headers.authorization.split(' ')[1]
+            token = req.headers.authorization.split(" ")[1];
             //verify token
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
             //get user from the token
-            req.user = await User.findById(decoded.id).select('-password');
+            req.user = await User.findById(decoded.id).select("-password");
             next();
         } catch (error) {
             console.log(error);
             res.status(401);
-            throw new Error('Not authorised');
+            throw new Error("Not authorised");
         }
     }
 
-    if(req.headers.authorization && req.headers.authorization.startsWith("Google")){
+    if (
+        req.headers.authorization &&
+        req.headers.authorization.startsWith("Google")
+    ) {
         try {
-            token = req.headers.authorization.split(' ')[1]
+            token = req.headers.authorization.split(" ")[1];
+            if (req.body.email) {
+                req.user = { id: req.body.email };
+            }
             next();
         } catch (error) {
             console.log(error);
             res.status(401);
-            throw new Error('Not authorised');
+            throw new Error("Not authorised");
         }
     }
 
-    if(!token){
+    if (!token) {
         res.status(401);
-        throw new Error('Not authorised, no token');
+        throw new Error("Not authorised, no token");
     }
-})
+});
 
-
-module.exports={protect}
+module.exports = { protect };

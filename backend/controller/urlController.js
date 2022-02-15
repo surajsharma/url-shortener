@@ -130,12 +130,20 @@ const deleteUrl = asyncHandler(async (req, res) => {
         throw new Error("Url not found");
     }
 
-    const user = await User.findById(req.user.id);
+    if (req.body.googleUser) {
+        const deletedUrl = await Url.findByIdAndDelete(req.params.id);
+        res.status(200).json({ deletedUrl });
+    } else {
+        user = await User.findById(req.user.id);
+    }
 
     //check for user
     if (!user) {
-        res.status(401);
-        throw new Error("User not found");
+        user = await User.find({ email: req.user.id });
+        if (!user) {
+            res.status(401);
+            throw new Error("User not found");
+        }
     }
 
     //make sure the logged in user matched the goal user
@@ -145,8 +153,7 @@ const deleteUrl = asyncHandler(async (req, res) => {
     }
 
     const deletedUrl = await Url.findByIdAndDelete(req.params.id);
-
-    res.status(200).json({ id: url._id });
+    res.status(200).json({ deletedUrl });
 });
 
 module.exports = {
