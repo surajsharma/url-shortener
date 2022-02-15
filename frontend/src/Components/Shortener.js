@@ -96,7 +96,6 @@ function Shortener({ loginData, setLoginData, apiKey, setApiKey }) {
       })
         .then((response) => response.json())
         .then((json) => {
-          console.log(json);
           setUrls(urls.length ? [...urls, json].reverse() : [...urls, json]);
           setUrl('');
           setLoading(false);
@@ -140,7 +139,6 @@ function Shortener({ loginData, setLoginData, apiKey, setApiKey }) {
       })
         .then((response) => response.json())
         .then((json) => {
-          console.log(json);
           setUrls([...urls, json].reverse());
           setUrl('');
           setLoading(false);
