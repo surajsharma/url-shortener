@@ -1,7 +1,5 @@
 {
   "extends": "react-app",
-  "failOnError": false,
-  "emitWarning": true,
   "plugins": ["prettier"],
   "rules": {
     "prettier/prettier": "error"
