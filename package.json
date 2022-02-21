@@ -9,7 +9,7 @@
         "server": "npx nodemon backend/server.js",
         "build": "cd frontend && npm run build",
         "install-client": "cd frontend && npm install --force",
-        "heroku-postbuild": "npm run install-client && npm run build"
+        "heroku-postbuild": "npm run install-client && npm run build --prefix frontend"
     },
     "author": "",
     "license": "ISC",
