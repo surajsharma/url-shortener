@@ -5,7 +5,7 @@
     "main": "server.js",
     "scripts": {
         "develop": "concurrently --kill-others-on-fail \"npm run server\" \"npm start --prefix frontend\"",
-        "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm start --prefix frontend\"",
+        "start": "concurrently --kill-others-on-fail\"npm start --prefix frontend\"  \"npm run server\" ",
         "server": "node backend/server.js",
         "build": "cd frontend && npm run build",
         "install-client": "cd frontend && npm install --force",
