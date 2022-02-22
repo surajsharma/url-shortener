@@ -8,6 +8,7 @@ const {
     updateUrl,
     deleteUrl
 } = require("../controller/urlController");
+
 const { protect } = require("../middleware/authMiddleware");
 
 router.route("/").get(protect, getUrls).post(protect, setUrl);

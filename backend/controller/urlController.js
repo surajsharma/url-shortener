@@ -8,7 +8,7 @@ const User = require("../models/user");
 //@route    GET /api/urls
 //@access   private
 const getUrls = asyncHandler(async (req, res) => {
-    // console.log(req.query.user);
+    console.log(req.query.user);
     const urls = await Url.find({ user: req.query.user });
     return res.status(200).json(urls);
 });

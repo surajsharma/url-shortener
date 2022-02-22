@@ -23,7 +23,7 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "craco build",
+    "start": "craco start && postcss src/app.css -o public/app.css",
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject"
@@ -54,5 +54,6 @@
   "resolutions": {
     "//": "See https://github.com/facebook/create-react-app/issues/11773",
     "react-error-overlay": "6.0.9"
-  }
+  },
+  "proxy": "http://localhost:8000"
 }

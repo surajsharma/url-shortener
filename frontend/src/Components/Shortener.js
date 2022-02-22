@@ -17,7 +17,16 @@ function Shortener({ loginData, setLoginData, apiKey, setApiKey }) {
       ? `Google ${loginData.token}`
       : `Bearer ${loginData.token}`;
 
-    let api_url = `/api/urls/?user=${loginData.email}`;
+    let api_url =
+      process.env.NODE_ENV === 'production'
+        ? `/api/urls/?user=${loginData.email}`
+        : `http://localhost:8000/api/urls/?user=${loginData.email}`;
+
+    console.log(
+      '🚀 ~ file: Shortener.js ~ line 21 ~ useEffect ~ api_url',
+      api_url,
+      process.env.NODE_ENV
+    );
 
     let headers = {
       'Content-Type': 'application/json',
